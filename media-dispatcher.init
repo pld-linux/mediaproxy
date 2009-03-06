@@ -1,0 +1,74 @@
+#!/bin/sh
+#
+# media-dispatcher	start/stop MediaProxy dispatcher
+#
+# chkconfig:	2345 20 80
+# description:	MediaProxy is a media relay for RTP/RTCP and UDP streams that \
+# 		works in tandem with OpenSIPS to provide NAT traversal \
+# 		capability for media streams from SIP user agents located \
+# 		behind NAT.
+# processname:	media-dispatcher
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down media-dispatcher
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+start() {
+	# Start daemons.
+	if [ ! -f /var/lock/subsys/media-dispatcher ]; then
+		msg_starting media-dispatcher
+		daemon media-dispatcher
+		ln -sf /var/run/mediaproxy/dispatcher.pid /var/run/media-dispatcher.pid
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/media-dispatcher
+	else
+		msg_already_running media-dispatcher
+	fi
+}
+
+stop() {
+	# Stop daemons.
+	if [ -f /var/lock/subsys/media-dispatcher ]; then
+		msg_stopping media-dispatcher
+		killproc media-dispatcher
+		rm -f /var/lock/subsys/media-dispatcher >/dev/null 2>&1
+	else
+		msg_not_running media-dispatcher
+	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart|force-reload)
+	stop
+	start
+	;;
+  status)
+	status media-dispatcher
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL

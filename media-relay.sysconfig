@@ -1,0 +1,2 @@
+# Define nice level for mediaproxy relay
+SERVICE_RUN_NICE_LEVEL="+5"
