@@ -1,5 +1,5 @@
 #
-Summary:	MediaProxy - a media relay for RTP/RTCP and UDP streams
+Summary:	Media relay for RTP/RTCP and UDP streams
 Name:		mediaproxy
 Version:	2.3.2
 Release:	1
@@ -27,9 +27,10 @@ user agents located behind NAT. When using MediaProxy, NAT traversal for RTP
 media will work without any settings in the SIP User Agents or the NAT router.
 
 %package common
-Summary:	MediaProxy - a media relay for RTP/RTCP and UDP streams
+Summary:	Media relay for RTP/RTCP and UDP streams
 Group:		Networking/Daemons
 Requires:	python-SQLObject
+Requires:	python-TwistedNames
 Requires:	python-TwistedCore
 Requires:	python-application
 Requires:	python-cjson
@@ -45,7 +46,7 @@ media will work without any settings in the SIP User Agents or the NAT router.
 This package contains files shared my MediaProxy dispatcher and relay.
 
 %package dispatcher
-Summary:	MediaProxy - a media relay for RTP/RTCP and UDP streams
+Summary:	Media relay for RTP/RTCP and UDP streams
 Group:		Networking/Daemons
 Requires:	%{name}-common = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
@@ -65,7 +66,7 @@ host as OpenSIPS. There may be several relays for the dispatcher to choose from
 and a relay may service more than one dispatcher.
 
 %package relay
-Summary:	MediaProxy - a media relay for RTP/RTCP and UDP streams
+Summary:	Media relay for RTP/RTCP and UDP streams
 Group:		Networking/Daemons
 Requires:	%{name}-common = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
