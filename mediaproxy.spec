@@ -1,12 +1,12 @@
 #
 Summary:	Media relay for RTP/RTCP and UDP streams
 Name:		mediaproxy
-Version:	2.3.2
+Version:	2.3.8
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://download.ag-projects.com/MediaProxy/%{name}-%{version}.tar.gz
-# Source0-md5:	c89ced211727da83d10d2cfa4bd5c0d3
+# Source0-md5:	8914a2b69415946e5ffdb843823b3ef1
 Source1:	media-dispatcher.sysconfig
 Source2:	media-dispatcher.init
 Source3:	media-relay.sysconfig
@@ -32,7 +32,7 @@ Group:		Networking/Daemons
 Requires:	python-SQLObject
 Requires:	python-TwistedNames
 Requires:	python-TwistedCore
-Requires:	python-application
+Requires:	python-application >= 1.1.5
 Requires:	python-cjson
 Requires:	python-gnutls
 Requires:	python-pyrad
