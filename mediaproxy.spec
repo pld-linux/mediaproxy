@@ -1,22 +1,24 @@
 #
 Summary:	Media relay for RTP/RTCP and UDP streams
 Name:		mediaproxy
-Version:	2.3.8
+Version:	2.4.4
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://download.ag-projects.com/MediaProxy/%{name}-%{version}.tar.gz
-# Source0-md5:	8914a2b69415946e5ffdb843823b3ef1
+# Source0-md5:	4ae842662702ddd4a5a9db263d261693
 Source1:	media-dispatcher.sysconfig
 Source2:	media-dispatcher.init
 Source3:	media-relay.sysconfig
 Source4:	media-relay.init
+Patch0:		%{name}-kernel_headers.patch
 URL:		http://mediaproxy.ag-projects.com/
 BuildRequires:	libnetfilter_conntrack-devel
 BuildRequires:	python >= 1:2.5
 BuildRequires:	python-devel >= 1:2.5
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.228
+BuildRequires:	linux-libc-headers >= 7:2.6.37
 %pyrequires_eq	python-modules
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -86,6 +88,7 @@ choose from and a relay may service more than one dispatcher.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 python setup.py build
