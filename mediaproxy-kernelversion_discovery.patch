@@ -1,0 +1,11 @@
+--- mediaproxy-2.4.4/mediaproxy/relay.py.orig	2011-06-09 12:47:39.190215619 +0200
++++ mediaproxy-2.4.4/mediaproxy/relay.py	2011-06-09 12:49:33.578825187 +0200
+@@ -326,7 +326,7 @@
+         if not ip_forward:
+             raise RuntimeError("IP forwarding is not available or not enabled (check %s)" % IP_FORWARD_FILE)
+         try:
+-            major, minor, revision = [int(num) for num in open(KERNEL_VERSION_FILE).read().split("-", 1)[0].split(".")[:3]]
++            major, minor, revision = [int(num) for num in open(KERNEL_VERSION_FILE).read().split("-", 1)[0].split("_", 1)[0].split(".")[:3]]
+         except:
+             raise RuntimeError("Could not determine Linux kernel version")
+         if (major, minor, revision) < (2, 6, 18):
