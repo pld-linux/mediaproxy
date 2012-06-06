@@ -105,8 +105,6 @@ python setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-# ,/var/run/%{name}
-rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/var/run/%{name},%{systemdtmpfilesdir}} \
 	$RPM_BUILD_ROOT{/etc/sysconfig,/etc/rc.d/init.d}
 
