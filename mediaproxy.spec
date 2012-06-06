@@ -1,50 +1,54 @@
 #
 Summary:	Media relay for RTP/RTCP and UDP streams
 Name:		mediaproxy
-Version:	2.4.4
-Release:	2
+Version:	2.5.2
+Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://download.ag-projects.com/MediaProxy/%{name}-%{version}.tar.gz
-# Source0-md5:	4ae842662702ddd4a5a9db263d261693
+# Source0-md5:	840de8f52e656991be728c15ec30bb5e
 Source1:	media-dispatcher.sysconfig
 Source2:	media-dispatcher.init
 Source3:	media-relay.sysconfig
 Source4:	media-relay.init
+Source5:	%{name}.tmpfiles
 Patch0:		%{name}-kernel_headers.patch
 Patch1:		%{name}-kernelversion_discovery.patch
 URL:		http://mediaproxy.ag-projects.com/
+BuildRequires:	iptables-devel
 BuildRequires:	libnetfilter_conntrack-devel
+BuildRequires:	linux-libc-headers >= 7:2.6.37
 BuildRequires:	python >= 1:2.5
 BuildRequires:	python-devel >= 1:2.5
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.228
-BuildRequires:	linux-libc-headers >= 7:2.6.37
 %pyrequires_eq	python-modules
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-MediaProxy is a media relay for RTP/RTCP and UDP streams that works in tandem
-with OpenSIPS to provide NAT traversal capability for media streams from SIP
-user agents located behind NAT. When using MediaProxy, NAT traversal for RTP
-media will work without any settings in the SIP User Agents or the NAT router.
+MediaProxy is a media relay for RTP/RTCP and UDP streams that works in
+tandem with OpenSIPS to provide NAT traversal capability for media
+streams from SIP user agents located behind NAT. When using
+MediaProxy, NAT traversal for RTP media will work without any settings
+in the SIP User Agents or the NAT router.
 
 %package common
 Summary:	Media relay for RTP/RTCP and UDP streams
 Group:		Networking/Daemons
 Requires:	python-SQLObject
-Requires:	python-TwistedNames
 Requires:	python-TwistedCore
+Requires:	python-TwistedNames
 Requires:	python-application >= 1.1.5
 Requires:	python-cjson
 Requires:	python-gnutls
 Requires:	python-pyrad
 
 %description common
-MediaProxy is a media relay for RTP/RTCP and UDP streams that works in tandem
-with OpenSIPS to provide NAT traversal capability for media streams from SIP
-user agents located behind NAT. When using MediaProxy, NAT traversal for RTP
-media will work without any settings in the SIP User Agents or the NAT router.
+MediaProxy is a media relay for RTP/RTCP and UDP streams that works in
+tandem with OpenSIPS to provide NAT traversal capability for media
+streams from SIP user agents located behind NAT. When using
+MediaProxy, NAT traversal for RTP media will work without any settings
+in the SIP User Agents or the NAT router.
 
 This package contains files shared my MediaProxy dispatcher and relay.
 
@@ -56,17 +60,19 @@ Requires(post,preun):	/sbin/chkconfig
 Suggests:	opensips
 
 %description dispatcher
-MediaProxy is a media relay for RTP/RTCP and UDP streams that works in tandem
-with OpenSIPS to provide NAT traversal capability for media streams from SIP
-user agents located behind NAT. When using MediaProxy, NAT traversal for RTP
-media will work without any settings in the SIP User Agents or the NAT router.
+MediaProxy is a media relay for RTP/RTCP and UDP streams that works in
+tandem with OpenSIPS to provide NAT traversal capability for media
+streams from SIP user agents located behind NAT. When using
+MediaProxy, NAT traversal for RTP media will work without any settings
+in the SIP User Agents or the NAT router.
 
-This package contains the dispatcher part of MediaProxy. The dispatcher
-component always runs on the same host as OpenSIPS and communicates with its
-mediaproxy module through a UNIX domain socket. The relay(s) connect to the
-dispatcher using TLS. This relay component may be on the same or on a different
-host as OpenSIPS. There may be several relays for the dispatcher to choose from
-and a relay may service more than one dispatcher.
+This package contains the dispatcher part of MediaProxy. The
+dispatcher component always runs on the same host as OpenSIPS and
+communicates with its mediaproxy module through a UNIX domain socket.
+The relay(s) connect to the dispatcher using TLS. This relay component
+may be on the same or on a different host as OpenSIPS. There may be
+several relays for the dispatcher to choose from and a relay may
+service more than one dispatcher.
 
 %package relay
 Summary:	Media relay for RTP/RTCP and UDP streams
@@ -76,28 +82,32 @@ Requires(post,preun):	/sbin/chkconfig
 Suggests:	opensips
 
 %description relay
-MediaProxy is a media relay for RTP/RTCP and UDP streams that works in tandem
-with OpenSIPS to provide NAT traversal capability for media streams from SIP
-user agents located behind NAT. When using MediaProxy, NAT traversal for RTP
-media will work without any settings in the SIP User Agents or the NAT router.
+MediaProxy is a media relay for RTP/RTCP and UDP streams that works in
+tandem with OpenSIPS to provide NAT traversal capability for media
+streams from SIP user agents located behind NAT. When using
+MediaProxy, NAT traversal for RTP media will work without any settings
+in the SIP User Agents or the NAT router.
 
-This package contains the media relay part of MediaProxy. The relay(s) connect
-to the dispatcher using TLS. This relay component may be on the same or on a
-different host as OpenSIPS. There may be several relays for the dispatcher to
-choose from and a relay may service more than one dispatcher.
+This package contains the media relay part of MediaProxy. The relay(s)
+connect to the dispatcher using TLS. This relay component may be on
+the same or on a different host as OpenSIPS. There may be several
+relays for the dispatcher to choose from and a relay may service more
+than one dispatcher.
 
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+#%patch0 -p1
+#%patch1 -p1
 
 %build
 python setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/var/run/%{name}} \
+# ,/var/run/%{name}
+rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/var/run/%{name},%{systemdtmpfilesdir}} \
 	$RPM_BUILD_ROOT{/etc/sysconfig,/etc/rc.d/init.d}
 
 python setup.py install \
@@ -114,6 +124,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/media-dispatcher
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/media-dispatcher
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/media-relay
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/media-relay
+install %{SOURCE5} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -153,7 +164,8 @@ fi
 %dir %{py_sitedir}/%{name}/interfaces/system
 %{py_sitedir}/%{name}/interfaces/system/*.py[co]
 %attr(755,root,root) %{py_sitedir}/%{name}/interfaces/system/*.so
-%dir /var/run/mediaproxy
+%attr(700,root,root) %dir /var/run/mediaproxy
+%{systemdtmpfilesdir}/%{name}.conf
 
 %files dispatcher
 %defattr(644,root,root,755)
