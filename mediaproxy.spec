@@ -12,8 +12,6 @@ Source2:	media-dispatcher.init
 Source3:	media-relay.sysconfig
 Source4:	media-relay.init
 Source5:	%{name}.tmpfiles
-Patch0:		%{name}-kernel_headers.patch
-Patch1:		%{name}-kernelversion_discovery.patch
 URL:		http://mediaproxy.ag-projects.com/
 BuildRequires:	iptables-devel
 BuildRequires:	libnetfilter_conntrack-devel
@@ -97,8 +95,6 @@ than one dispatcher.
 
 %prep
 %setup -q
-#%patch0 -p1
-#%patch1 -p1
 
 %build
 python setup.py build
