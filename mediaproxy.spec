@@ -1,12 +1,12 @@
 #
 Summary:	Media relay for RTP/RTCP and UDP streams
 Name:		mediaproxy
-Version:	2.5.2
-Release:	2
+Version:	2.6.1
+Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://download.ag-projects.com/MediaProxy/%{name}-%{version}.tar.gz
-# Source0-md5:	840de8f52e656991be728c15ec30bb5e
+# Source0-md5:	72443d6137c77c3c9cd446ca98ec5d21
 Source1:	media-dispatcher.sysconfig
 Source2:	media-dispatcher.init
 Source3:	media-relay.sysconfig
@@ -151,6 +151,8 @@ fi
 %{py_sitedir}/*-*.egg-info
 %dir %{py_sitedir}/%{name}
 %{py_sitedir}/%{name}/*.py[co]
+%dir %{py_sitedir}/%{name}/configuration
+%{py_sitedir}/%{name}/configuration/*.py[co]
 %dir %{py_sitedir}/%{name}/interfaces
 %{py_sitedir}/%{name}/interfaces/*.py[co]
 %dir %{py_sitedir}/%{name}/interfaces/accounting
