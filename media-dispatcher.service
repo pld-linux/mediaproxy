@@ -1,0 +1,12 @@
+[Unit]
+Description=MediaProxy dispatcher for media relays
+After=network.target
+Before=opensips.service
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/media-dispatcher --pid /var/run/mediaproxy/dispatcher.pid
+PIDFile=/var/run/mediaproxy/dispatcher.pid
+
+[Install]
+WantedBy=multi-user.target

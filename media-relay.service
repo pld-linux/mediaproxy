@@ -1,0 +1,12 @@
+[Unit]
+Description=RTP/RTCP media relay
+After=network.target
+
+[Service]
+Type=forking
+Restart=on-failure
+ExecStart=/usr/bin/media-relay --pid /var/run/mediaproxy/relay.pid
+PIDFile=/var/run/mediaproxy/relay.pid
+
+[Install]
+WantedBy=multi-user.target
